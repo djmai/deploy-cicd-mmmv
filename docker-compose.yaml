@@ -83,8 +83,8 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - ELASTICSEARCH_HOSTS=http://192.168.99.101:9200
       - VIRTUAL_HOST=kibana.midominiomtie.net
-    ports:
-      - 5601:5601
+    #ports:
+    #  - 5601:5601
     depends_on:
       - elasticsearch
 
