@@ -1,20 +1,9 @@
 version: "3"
 services:
-  nginx-reverse-proxy:
-    image: jwilder/nginx-proxy:alpine
-    container_name: 'Reverse-Proxy'
-    restart: always
-    ports:
-        - '80:80'
-    volumes:
-        - vhostd:/etc/nginx/vhost.d
-        - html:/usr/share/nginx/html
-        - /var/run/docker.sock:/tmp/docker.sock:ro
-        #- ./config/reverse-proxy/custom-settings.conf:/etc/nginx/conf.d/custom-settings.conf:ro
+  # add this:
   mysql:
     image: mysql:8
-    container_name: MRSI-MySQL
-    # restart: on-failure
+    container_name: sem_mysql
     ports:
       - 3306:3306
     environment:
@@ -25,70 +14,3 @@ services:
     volumes:
       # Dump files for initiating tables
       - ./data/:/docker-entrypoint-initdb.d/
-    logging:
-        driver: "json-file"
-        options:
-            max-size: "10k"
-            max-file: "10"
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
-    container_name: MRSI-ElasticSearch
-    restart: always
-    expose:
-      - 9200
-      - 9300
-    ports:
-      - 9200:9200
-      - 9300:9300
-    environment:
-      - node.name=elasticsearch
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - ./volumes/elasticsearch:/usr/share/elasticsearch/data
-    logging:
-        driver: "json-file"
-        options:
-            max-size: "10k"
-            max-file: "10"
-  logstash:
-    build:
-      context: .
-      dockerfile: Dockerfile-logstash
-    container_name: MRSI-Logstash
-    # restart: on-failure
-    depends_on:
-      - mysql
-      - elasticsearch
-    volumes:
-      - ./volumes/logstash/pipeline/:/usr/share/logstash/pipeline/
-      - ./volumes/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./volumes/logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
-      - ./volumes/logstash/config/queries/:/usr/share/logstash/config/queries/
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10k"
-        max-file: "10"
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.2
-    container_name: MRSI-Kibana
-    restart: always
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTICSEARCH_HOSTS=http://192.168.99.101:9200
-      - VIRTUAL_HOST=kibana.midominiomtie.net
-    #ports:
-    #  - 5601:5601
-    depends_on:
-      - elasticsearch
-
-volumes:    
-  html:
-  vhostd:
-  netdata-etc:
