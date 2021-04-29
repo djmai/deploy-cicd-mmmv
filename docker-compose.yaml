@@ -61,7 +61,7 @@ services:
   # ElasticSearch Container #   
   ###########################
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
     container_name: MRSI-ElasticSearch
     restart: always
     expose:
@@ -112,11 +112,12 @@ services:
   # Kibana Container #
   ####################
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.2
+    image: docker.elastic.co/kibana/kibana:7.9.3
     container_name: MRSI-Kibana
     restart: always
     environment:
-      - ELASTICSEARCH_HOSTS=http://192.168.99.102:9200
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      #- ELASTICSEARCH_HOSTS=http://192.168.99.103:9200
       - VIRTUAL_HOST=kibana.midominiomtie.net
     #ports:
     #  - 5601:5601
