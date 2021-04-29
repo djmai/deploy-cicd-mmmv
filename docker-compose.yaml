@@ -8,7 +8,7 @@ services:
   ############################
   nginx-reverse-proxy:
     image: jwilder/nginx-proxy:alpine
-    container_name: 'Reverse-Proxy'
+    container_name: 'MRSI-Proxy'
     restart: always
     ports:
         - '80:80'
@@ -21,25 +21,25 @@ services:
   ##################### 
   # MongoDB Container #
   #####################
-  mongo:
-    image: mongo:4.0
-    container_name: MRSI-MongoDB
-    command: mongod --auth --replSet rs0
-    restart: always
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: mongoadmin
-    volumes:
-      - ./volumes/mongodb/data/db:/data/db
+  # mongo:
+  #   image: mongo:4.0
+  #   container_name: MRSI-MongoDB
+  #   command: mongod --auth --replSet rs0
+  #   restart: always
+  #   ports:
+  #     - 27017:27017
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+  #   volumes:
+  #     - ./volumes/mongodb/data/db:/data/db
 
   ###################
   # MySQL Container #
   ###################
   mysql:
     image: mysql:8
-    container_name: MRSI_MySQL
+    container_name: MRSI-MySQL
     # restart: on-failure
     ports:
       - 3306:3306
@@ -126,47 +126,47 @@ services:
   #######################
   # Monstache Container #
   #######################
-  monstache:
-    container_name: 'MRSI-Monstache'
-    restart: always
-    image: rwynn/monstache:rel6
-    command: -f ./monstache.config.toml &
-    volumes:
-      - ./monstache/monstache.config.toml:/monstache.config.toml
-    depends_on:
-      - elasticsearch
-      - mongo
-    links:
-      - elasticsearch
-    ports:
-      - "8080:8080"
+  # monstache:
+  #   container_name: 'MRSI-Monstache'
+  #   restart: always
+  #   image: rwynn/monstache:rel6
+  #   command: -f ./monstache.config.toml &
+  #   volumes:
+  #     - ./monstache/monstache.config.toml:/monstache.config.toml
+  #   depends_on:
+  #     - elasticsearch
+  #     - mongo
+  #   links:
+  #     - elasticsearch
+  #   ports:
+  #     - "8080:8080"
 
   ##############################
   # Monitor-NET-Data Container #
   ##############################
-  netdata:
-    container_name: 'MONITOR'
-    image: netdata/netdata
-    restart: always
-    expose:
-      - "19999"
-    volumes:
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - netdata-etc:/etc/netdata
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor=unconfined
-    environment:
-      - VIRTUAL_HOST=monitor.midominiomtie.net
-      - VIRTUAL_PORT=19999
-      - DOCKER_HOST=proxy:2375
-      - PGID=999
-      - VIRTUALIZATION=kvm
+  # netdata:
+  #   container_name: 'MRSI-MONITOR'
+  #   image: netdata/netdata
+  #   restart: always
+  #   expose:
+  #     - "19999"
+  #   volumes:
+  #     - /etc/passwd:/host/etc/passwd:ro
+  #     - /etc/group:/host/etc/group:ro
+  #     - /proc:/host/proc:ro
+  #     - /sys:/host/sys:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - netdata-etc:/etc/netdata
+  #   cap_add:
+  #     - SYS_PTRACE
+  #   security_opt:
+  #     - apparmor=unconfined
+  #   environment:
+  #     - VIRTUAL_HOST=monitor.midominiomtie.net
+  #     - VIRTUAL_PORT=19999
+  #     - DOCKER_HOST=proxy:2375
+  #     - PGID=999
+  #     - VIRTUALIZATION=kvm
 
 volumes:    
     html:
