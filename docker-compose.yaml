@@ -72,7 +72,7 @@ services:
       - 9300:9300
     environment:
       - node.name=elasticsearch
-      - discovery.type=singe-node
+      - discovery.type=single-node
       #- discovery.seed_hosts=elasticsearch
       #- cluster.initial_master_nodes=elasticsearch
       #- cluster.name=sdes-bi-cluster
