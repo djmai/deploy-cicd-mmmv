@@ -58,7 +58,7 @@ services:
             max-file: "10"
 
   ###########################
-  # ElasticSearch Container #   
+  # ElasticSearch Container # 
   ###########################
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
